@@ -19,6 +19,9 @@ async def _ensure_awaitable(res: T) -> T:
 
 
 class AsyncPipe(Generic[D]):
+    """
+    Pipe async callables together
+    """
     def __init__(self, *fns: Callable[[D], MaybeAwaitable[D]]):
         assert len(fns) > 1, "There must be at least 2 functions to pipe"
         self.fns = fns
@@ -31,6 +34,9 @@ class AsyncPipe(Generic[D]):
 
 
 class Pipe(Generic[D]):
+    """
+    Pipe callables together
+    """
     def __init__(self, *fns: Callable[[D], D]):
         assert len(fns) > 1, "There must be at least 2 functions to pipe"
         self.fns = fns
