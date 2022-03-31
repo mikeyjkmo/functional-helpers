@@ -1,4 +1,5 @@
 from typing import Awaitable, Any, TypeVar, cast, Callable, Generic, Union
+
 from functools import reduce
 from inspect import isawaitable
 
@@ -47,7 +48,7 @@ class Pipe(Generic[D]):
         return reduce(step, self.fns, initial_input)
 
 
-def bind(f: Callable[..., T]) -> Callable[[Result[T, E]], Result[T, E]]:
+def bind(f: Callable[..., Result[T, E]]) -> Callable[[Result[T, E]], Result[T, E]]:
     """
     Bind a function to allow it to take a result. If
     the result is an error, return it, if not then call the bound function.
