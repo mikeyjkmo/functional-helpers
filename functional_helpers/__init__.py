@@ -6,10 +6,6 @@ from inspect import isawaitable
 
 T = TypeVar("T")
 D = TypeVar("D")
-E = TypeVar("E", bound=Exception)
-
-Result = Union[T, E]
-
 MaybeAwaitable = Union[D, Awaitable[D]]
 
 
@@ -46,15 +42,3 @@ class Pipe(Generic[D]):
         def step(acc: Any, f: Any) -> Any:
             return f(acc)
         return reduce(step, self.fns, initial_input)
-
-
-def bind(f: Callable[..., Result[T, E]]) -> Callable[[Result[T, E]], Result[T, E]]:
-    """
-    Bind a function to allow it to take a result. If
-    the result is an error, return it, if not then call the bound function.
-    """
-    def _bound_f(result: Result[T, E]) -> Result[T, E]:
-        if isinstance(result, Exception):
-            return cast(E, result)
-        return f(result)
-    return _bound_f
